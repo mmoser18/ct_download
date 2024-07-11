@@ -281,9 +281,15 @@ public class Download_CT
 			switch (opt.getId()) {
 			case 'd':
 				this.downloadPath = opt.getValue().replace('/', File.separatorChar);
+				if (this.downloadPath.endsWith("\"")) { // for some odd reason the trailing quote from the cmd-file makes in into the argument ||-(
+					this.downloadPath = this.downloadPath.substring(0, this.downloadPath.length()-1);
+				}				
 				break;
 			case 't':
 				this.targetPath = opt.getValue().replace('/', File.separatorChar); 
+				if (this.targetPath.endsWith("\"")) { // for some odd reason the trailing quote from the cmd-file makes in into the argument ||-(
+					this.targetPath = this.targetPath.substring(0, this.targetPath.length()-1);
+				}
 				break;
 			case 'u':
 				this.usr = opt.getValue();
