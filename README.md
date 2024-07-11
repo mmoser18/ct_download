@@ -11,7 +11,8 @@ Thus, running this more frequent than the four issues listed of that page are dr
 The basic command-line is 
 `java -jar <jar-file> -u <userId> -p <password> <further options here...>`
 
-See the `downloadCT.cmd`-file for an example how to run this via a Windows command-file. 
+See the `downloadCT.cmd`-file for an example how to run this via a Windows command-file
+(Note: you will have to enter your user-id and password into that file to get going...).
 
 ```
 usage: Download_CT
