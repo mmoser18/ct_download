@@ -62,6 +62,7 @@ public class Download_CT
 		// driver.manage().window().maximize();
 
 		// Navigate to the website.
+		log.info("navigating to '" + baseUrl + "':");
 		driver.get(baseUrl);
 	}
 	
@@ -77,8 +78,8 @@ public class Download_CT
 		if (anmeldenButton.isDisplayed()) { // we are not logged-in, yet.
 			log.info("\"Anmelden\" is displayed - logging in:");
 			anmeldenButton.click();
-			// filling out the login form:
-			WebElement loginUser = driver.findElement(By.id("login-user"));
+			// filling out the login form:			
+			WebElement loginUser = waitForAppearance(By.id("login-user"), 3); // give the site a few seconds to display the login-form...
 			WebElement loginPassword = driver.findElement(By.id("login-password"));
 			WebElement loginSubmit = driver.findElement(By.name("rm_login"));
 			log.trace("entering user-id: '{}'", usr);
@@ -92,7 +93,7 @@ public class Download_CT
 			log.info("'Anmelden' is NOT displayed - assuming that we already logged in.");			
 		}
 
-		WebElement archiveHeader = waitForApearance("archive__header");		
+		WebElement archiveHeader = waitForAppearance("archive__header");		
 		List<WebElement> issueButtons = driver.findElements(RelativeLocator.with(By.className("archive__year__link")).below(archiveHeader));
 		
 		final List<IssueDescriptor> issueDescriptors = issueButtons.stream()
@@ -192,7 +193,7 @@ public class Download_CT
 		issue.button.click();
 		
 		log.info("waiting for the download link to appear:");
-		WebElement downloadlink = waitForApearance("issue-download-link", 65);
+		WebElement downloadlink = waitForAppearance("issue-download-link", 65);
 
 		// remove existing prior file with same name:
 		String downloadLoc = replacePlaceHolders(downloadPath, issue);
@@ -252,22 +253,26 @@ public class Download_CT
 		}
 	}
 	
-	WebElement waitForApearance(String className) throws Exception {
-		return waitForApearance(className, AppearanceDefaultWait);
+	WebElement waitForAppearance(String className) throws Exception {
+		return waitForAppearance(className, AppearanceDefaultWait);
 	}
-	WebElement waitForApearance(String className, int waitMaxSeconds) throws Exception {
-		log.info("waiting for appearance of element '{}'", className);			
+	WebElement waitForAppearance(String className, int waitMaxSeconds) throws Exception {
+		return waitForAppearance(By.className(className), waitMaxSeconds);
+	}
+	
+	WebElement waitForAppearance(By by, int waitMaxSeconds) throws Exception {
+		log.info("waiting for appearance of element '{}'", by);	
 		List<WebElement> elems = null;
 		WebElement expectedElem = null;
 		int nrAttempts = 0;
 		do {
-			elems = driver.findElements(By.className(className));
-			
-			if (elems.size() > 0 && (expectedElem = elems.getFirst()).isDisplayed() && expectedElem.isEnabled()) {
+			elems = driver.findElements(by);
+			if (elems.size() > 0 && (expectedElem = elems.getFirst()).isDisplayed()/* && expectedElem.isEnabled()*/) {
 				break;
 			}
-			if (nrAttempts++ > waitMaxSeconds) {
-				throw new Exception("no element '" + className + "' found within " + waitMaxSeconds + " seconds");
+			if (nrAttempts++ >= waitMaxSeconds) {
+				log.info("no element '" + by + "' found within " + waitMaxSeconds + " seconds");
+				return null;
 			}
 			log.info("waiting ({})...", nrAttempts);			
 			Thread.sleep(1000);
