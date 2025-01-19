@@ -28,7 +28,7 @@ import org.openqa.selenium.support.locators.RelativeLocator;
 public class Download_CT
 {
 	private final static String baseUrl = "https://www.heise.de/select/ct/archiv";
-	private final static String ButtonLabelPattern = "c't (((\\d{2})/)|(Jahresrückblick ))(\\d{4})";
+	private final static String ButtonLabelPattern = "c't (((\\d{1,2})/)|(Jahresrückblick ))(\\d{4})";
 	private final static Pattern buttonLabelPattern = Pattern.compile(ButtonLabelPattern);
 	private static final String IssueFileName = "ct.%2$s.%3$s.pdf"; // %1: jahrgang, %2: last two digits of jahrgang, %3: issue-nr.
 	private final static int DownloadMaxWait = 200; // [seconds] max. completion wait time before a download is considered failed
@@ -36,7 +36,7 @@ public class Download_CT
 	private final static String DefaultDownloadPath = (System.getProperty("os.name").startsWith("Windows") 
 	                                                  ? System.getProperty("user.home", "U:") // assuming "U:" points to user's home directory
 	                                                  : "~") // for *ix and Mac
-	                                                  + File.separator + "downloads";
+	                                                  + File.separator + "Downloads";
 
 	private String downloadPath = DefaultDownloadPath;
 	private String targetPath;
@@ -184,7 +184,7 @@ public class Download_CT
 		String jahrgang = issue.getJahrgang();
 		String jahrgangLastDigits = jahrgang.substring(2);
 		String issueNr = issue.getIssueNr();
-		return String.format(template, jahrgang, jahrgangLastDigits, issueNr);
+		return String.format(template, jahrgang, jahrgangLastDigits, issueNr.length() >= 2 ? issueNr : "0" + issueNr);
 	}
 
 	void downloadIssue(IssueDescriptor issue) throws Exception {
@@ -203,7 +203,7 @@ public class Download_CT
 			downloadFile.delete();
 		}
 		log.info("clicking '{}':", downloadlink.getText());
-		downloadlink.click(); // BNote: this immediately starts downloading the file to the download folder (i.e. without asking for a destination where to save it)!W
+		downloadlink.click(); // Note: this immediately starts downloading the file to the download folder (i.e. without asking for a destination where to save it)!W
 		log.info("downloading to '{}':", downloadFile);
 
 		// wait until download completes:
