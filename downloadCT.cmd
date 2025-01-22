@@ -1,3 +1,6 @@
+rem Copyright © 2024-2025 by Michael Moser / 17732576+mmoser18@users.noreply.github.com
+rem Released under GPL V3 or later
+
 echo running c't downloader:
 set loc=%HOME%\Documents\eclipse\workspace\ct_download\target\
 set jar=%loc%\ct_download-1.0.0.jar

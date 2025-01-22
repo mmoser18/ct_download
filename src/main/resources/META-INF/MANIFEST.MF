@@ -1,2 +1,4 @@
 Manifest-Version: 1.0
+Application-Name: c't downloader
+Created-By: Michael Moser / 17732576+mmoser18@users.noreply.github.com
 Main-Class: mmo.utils.ct_download.Download_CT

@@ -7,6 +7,8 @@ all issues shown, verifies that each is already present in the target folder and
 
 Thus, running this more frequent than the four issues listed of that page are dropping off to the right (i.e. at least every 8 weeks) this will make sure that you have all issues of c't downloaded to your destination folder in PDF format for your reading pleasure.
 
+Copyright © 2024-2025 by Michael Moser / 17732576+mmoser18@users.noreply.github.com
+
 ## Setup:
 The basic command-line is 
 `java -jar <jar-file> -u <userId> -p <password> <further options here...>`
@@ -21,3 +23,5 @@ usage: Download_CT
  -d,--download-folder <arg>   download-folder  [optional - default: %HOME%\downloads-folder will be used]
  -t,--target-folder <arg>     target-folder [optional - default: leave file in the download-folder (above)]
 ```
+
+Created-By: Michael Moser / 17732576+mmoser18@users.noreply.github.com
