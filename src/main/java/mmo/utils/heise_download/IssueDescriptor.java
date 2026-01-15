@@ -1,11 +1,11 @@
 /**
- * Copyright © 2024-2025 by Michael Moser
+ * Copyright © 2024-2026 by Michael Moser
  * Released under GPL V3 or later
  *
  * @author mmo / Michael Moser / 17732576+mmoser18@users.noreply.github.com
  */
 
-package mmo.utils.ct_download;
+package mmo.utils.heise_download;
 
 import org.openqa.selenium.WebElement;
 

@@ -5,9 +5,9 @@
 	>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mmo.utils.selenium_scripts</groupId>
-	<artifactId>ct_download</artifactId>
-	<version>1.0.0</version>
-	<name>ct_download</name>
+	<artifactId>heise_download</artifactId>
+	<version>2.0.0</version>
+	<name>heise_download</name>
 	<packaging>jar</packaging>
 	
 	<properties>
@@ -79,7 +79,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>mmo.utils.ct_download.Download_CT</mainClass>
+							<mainClass>mmo.utils.heise_download.Download_Heise</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
