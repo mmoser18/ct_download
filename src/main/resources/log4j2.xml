@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <!-- Logging Properties -->
+    <Properties>
+    	<!-- %level %d:{date&time} %t[hread] %c:c[lass] %p:p[ackage&class] %l[ine] %m %n[ewline] -->
+        <!-- with timestamp: ->
+        <Property name="LOG_PATTERN">[%-5level] %d{yyyy-MM-dd'T'HH:mm:ss} %c %m%n</Property> 
+        <!- -->
+        <!-- without timestamp: -->
+        <Property name="LOG_PATTERN">[%-5level] %c %m%n</Property>
+        <!--  -->
+        <!-- Property name="APP_LOG_ROOT">C:/temp/logs/</Property -->
+        <Property name="APP_LOG_ROOT"></Property>
+    </Properties>
+
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+           <!-- %p:level %d:date %t:thread %m[sg]:message %c{n}:class&package with precision -->   
+            <PatternLayout charset="UTF-8" pattern="${LOG_PATTERN}" />
+        </Console>
+
+        <!-- File Appenders on need basis -->
+        <RollingFile name="file" fileName="${APP_LOG_ROOT}log.txt"
+            filePattern="${APP_LOG_ROOT}log-%d{yyyy-MM-dd}-%i.txt">
+            <!-- 
+            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+             -->
+            <PatternLayout charset="UTF-8" pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+    
+    <Loggers>
+        <Root level="debug" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Root>
+    </Loggers>
+</Configuration>

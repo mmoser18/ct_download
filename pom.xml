@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mmo.utils.selenium_scripts</groupId>
 	<artifactId>heise_download</artifactId>
-	<version>2.0.0</version>
+	<version>2.1.0</version>
 	<name>heise_download</name>
 	<packaging>jar</packaging>
 	
@@ -14,16 +14,15 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<slf4j.version>2.0.13</slf4j.version>
-		<log4j2-version>2.23.1</log4j2-version>
-		<selenium-version>4.21.0</selenium-version>
+		<log4j.version>2.25.1</log4j.version>
+		<selenium-version>4.41.0</selenium-version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.32</version>
+			<version>1.18.44</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -47,7 +46,27 @@
 			<version>1.6.0</version>
 		</dependency>
 
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-api</artifactId>
+		    <version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		    <version>${log4j.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-slf4j-impl</artifactId>
+		    <version>${log4j.version}</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+<!-- 
+		<slf4j.version>2.0.17</slf4j.version>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
@@ -59,7 +78,7 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-
+-->
 		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
 		<dependency>
 			<groupId>org.testng</groupId>

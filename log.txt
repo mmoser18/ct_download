@@ -1,0 +1,92 @@
+[DEBUG] mmo.utils.heise_download.Download_Heise option m: 'ct'
+[DEBUG] mmo.utils.heise_download.Download_Heise option u: 'yourUserIdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option p: 'yourPwdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option t: 'C:\temp\'
+[INFO ] mmo.utils.heise_download.Download_Heise setUpBrowser.
+[INFO ] mmo.utils.heise_download.Download_Heise navigating to 'https://www.heise.de/select/ct/archiv':
+[DEBUG] mmo.utils.heise_download.Download_Heise option m: 'ct'
+[DEBUG] mmo.utils.heise_download.Download_Heise option u: 'yourUserIdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option p: 'yourPwdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option t: 'C:\temp\'
+[INFO ] mmo.utils.heise_download.Download_Heise setUpBrowser.
+[INFO ] mmo.utils.heise_download.Download_Heise navigating to 'https://www.heise.de/select/ct/archiv':
+[DEBUG] mmo.utils.heise_download.Download_Heise option m: 'ct'
+[DEBUG] mmo.utils.heise_download.Download_Heise option u: 'yourUserIdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option p: 'yourPwdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option t: 'C:\temp\'
+[INFO ] mmo.utils.heise_download.Download_Heise setUpBrowser.
+[INFO ] mmo.utils.heise_download.Download_Heise navigating to 'https://www.heise.de/select/ct/archiv':
+[DEBUG] mmo.utils.heise_download.Download_Heise Total number of iframes found: 0
+[DEBUG] mmo.utils.heise_download.Download_Heise option m: 'ct'
+[DEBUG] mmo.utils.heise_download.Download_Heise option u: 'yourUserIdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option p: 'yourPwdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option t: 'C:\temp\'
+[INFO ] mmo.utils.heise_download.Download_Heise setUpBrowser.
+[INFO ] mmo.utils.heise_download.Download_Heise navigating to 'https://www.heise.de/select/ct/archiv':
+[DEBUG] mmo.utils.heise_download.Download_Heise option m: 'ct'
+[DEBUG] mmo.utils.heise_download.Download_Heise option u: 'yourUserIdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option p: 'yourPwdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option t: 'C:\temp\'
+[INFO ] mmo.utils.heise_download.Download_Heise setUpBrowser.
+[INFO ] mmo.utils.heise_download.Download_Heise navigating to 'https://www.heise.de/select/ct/archiv':
+[DEBUG] mmo.utils.heise_download.Download_Heise Total number of iframes found: 3
+[DEBUG] mmo.utils.heise_download.Download_Heise Frame-name: 'null'
+[DEBUG] mmo.utils.heise_download.Download_Heise Frame-name: 'null'
+[DEBUG] mmo.utils.heise_download.Download_Heise Frame-name: 'Cookie- und Datenverarbeitung'
+[INFO ] mmo.utils.heise_download.Download_Heise iframe for cookie garbage found: 'Cookie- und Datenverarbeitung': 2
+[INFO ] mmo.utils.heise_download.Download_Heise switched to frame 2: 'Cookie- und Datenverarbeitung'
+[INFO ] mmo.utils.heise_download.Download_Heise waiting for appearance of element 'By.className: sp_choice_type_13'
+[INFO ] mmo.utils.heise_download.Download_Heise Clicking 'Ablehnen'
+[DEBUG] mmo.utils.heise_download.Download_Heise option m: 'ct'
+[DEBUG] mmo.utils.heise_download.Download_Heise option u: 'yourUserIdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option p: 'yourPwdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option t: 'C:\temp\'
+[INFO ] mmo.utils.heise_download.Download_Heise setUpBrowser.
+[INFO ] mmo.utils.heise_download.Download_Heise navigating to 'https://www.heise.de/select/ct/archiv':
+[DEBUG] mmo.utils.heise_download.Download_Heise option m: 'ct'
+[DEBUG] mmo.utils.heise_download.Download_Heise option u: 'yourUserIdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option p: 'yourPwdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option t: 'C:\temp\'
+[INFO ] mmo.utils.heise_download.Download_Heise setUpBrowser.
+[INFO ] mmo.utils.heise_download.Download_Heise navigating to 'https://www.heise.de/select/ct/archiv':
+[DEBUG] mmo.utils.heise_download.Download_Heise Total number of iframes found: 3
+[DEBUG] mmo.utils.heise_download.Download_Heise Frame-name: 'null'
+[DEBUG] mmo.utils.heise_download.Download_Heise Frame-name: 'null'
+[DEBUG] mmo.utils.heise_download.Download_Heise Frame-name: 'Cookie- und Datenverarbeitung'
+[INFO ] mmo.utils.heise_download.Download_Heise iframe for cookie garbage found: 'Cookie- und Datenverarbeitung': [[ChromeDriver: chrome on windows (54ba3e36e1957b71b76cdfbb06956cae)] -> tag name: iframe]
+[INFO ] mmo.utils.heise_download.Download_Heise switched to frame 2: 'Cookie- und Datenverarbeitung'
+[INFO ] mmo.utils.heise_download.Download_Heise waiting for appearance of element 'By.className: sp_choice_type_13'
+[INFO ] mmo.utils.heise_download.Download_Heise Clicking 'Ablehnen'
+[DEBUG] mmo.utils.heise_download.Download_Heise loginButton=[[ChromeDriver: chrome on windows (54ba3e36e1957b71b76cdfbb06956cae)] -> xpath: //span[contains(.,'Anmelden')]]
+[INFO ] mmo.utils.heise_download.Download_Heise "Anmelden" is displayed - logging in:
+[INFO ] mmo.utils.heise_download.Download_Heise waiting for appearance of element 'By.id: login-user'
+[INFO ] mmo.utils.heise_download.Download_Heise clicking 'Anmelden':
+[INFO ] mmo.utils.heise_download.Download_Heise we should be logged-in now...
+[INFO ] mmo.utils.heise_download.Download_Heise waiting for appearance of element 'By.className: archive__header'
+[INFO ] mmo.utils.heise_download.Download_Heise waiting (1)...
+[INFO ] mmo.utils.heise_download.Download_Heise waiting (2)...
+[DEBUG] mmo.utils.heise_download.Download_Heise option m: 'ct'
+[DEBUG] mmo.utils.heise_download.Download_Heise option u: 'yourUserIdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option p: 'yourPwdHere'
+[DEBUG] mmo.utils.heise_download.Download_Heise option t: 'C:\temp\'
+[INFO ] mmo.utils.heise_download.Download_Heise setUpBrowser.
+[INFO ] mmo.utils.heise_download.Download_Heise navigating to 'https://www.heise.de/select/ct/archiv':
+[DEBUG] mmo.utils.heise_download.Download_Heise Total number of iframes found: 3
+[DEBUG] mmo.utils.heise_download.Download_Heise Frame-name: 'null'
+[DEBUG] mmo.utils.heise_download.Download_Heise Frame-name: 'null'
+[DEBUG] mmo.utils.heise_download.Download_Heise Frame-name: 'Cookie- und Datenverarbeitung'
+[INFO ] mmo.utils.heise_download.Download_Heise iframe for cookie garbage found: 'Cookie- und Datenverarbeitung': [[ChromeDriver: chrome on windows (1d5a34736acfcc31ca762669a57e822f)] -> tag name: iframe]
+[INFO ] mmo.utils.heise_download.Download_Heise switched to frame 2: 'Cookie- und Datenverarbeitung'
+[INFO ] mmo.utils.heise_download.Download_Heise waiting for appearance of element 'By.className: sp_choice_type_13'
+[INFO ] mmo.utils.heise_download.Download_Heise Clicking 'Ablehnen'
+[DEBUG] mmo.utils.heise_download.Download_Heise loginButton=[[ChromeDriver: chrome on windows (1d5a34736acfcc31ca762669a57e822f)] -> xpath: //span[contains(.,'Anmelden')]]
+[INFO ] mmo.utils.heise_download.Download_Heise "Anmelden" is displayed - logging in:
+[INFO ] mmo.utils.heise_download.Download_Heise waiting for appearance of element 'By.id: login-user'
+[INFO ] mmo.utils.heise_download.Download_Heise clicking 'Anmelden':
+[INFO ] mmo.utils.heise_download.Download_Heise we should be logged-in now...
+[INFO ] mmo.utils.heise_download.Download_Heise waiting for appearance of element 'By.className: archive__header'
+[INFO ] mmo.utils.heise_download.Download_Heise waiting (1)...
+[INFO ] mmo.utils.heise_download.Download_Heise waiting (2)...
+[INFO ] mmo.utils.heise_download.Download_Heise waiting (3)...
+[INFO ] mmo.utils.heise_download.Download_Heise waiting (4)...
+[INFO ] mmo.utils.heise_download.Download_Heise waiting (5)...
