@@ -40,7 +40,7 @@ public class Download_Heise
 		final String urlFragment;
 		final String labelFragment;
 		final String filenamePrefix;
-		
+
 		Magazine(final String urlFragment, final String labelFragment, final String filenamePrefix) {
 			this.urlFragment = urlFragment;
 			this.labelFragment = labelFragment;
@@ -50,7 +50,7 @@ public class Download_Heise
 
 	private final static int DownloadMaxWait = 200; // [seconds] max. completion wait time before a download is considered failed
 	private final static int AppearanceDefaultWait = 10; // [seconds]
-	private final static String DefaultDownloadPath = (System.getProperty("os.name").startsWith("Windows") 
+	private final static String DefaultDownloadPath = (System.getProperty("os.name").startsWith("Windows")
 	                                                  ? System.getProperty("user.home", "U:") // assuming "U:" points to user's home directory
 	                                                  : "~") // for *ix and Mac
 	                                                  + File.separator + "Downloads";
@@ -61,13 +61,13 @@ public class Download_Heise
 	private String targetPath;
 	private String usr;
 	private String pwd;
-	
+
 	// populated via init():
-	private String baseUrl;	
+	private String baseUrl;
 	private String buttonLabel;
 	private Pattern buttonLabelPattern;
 	private String issueFileName;
-	
+
 	private WebDriver driver;
 
 	protected void init() {
@@ -83,7 +83,7 @@ public class Download_Heise
 		closeBrowser();
 		super.finalize();
 	}
-	
+
 	void setUpBrowser() {
 		log.info("setUpBrowser.");
 		// Initialize ChromeDriver.
@@ -93,10 +93,47 @@ public class Download_Heise
 		// driver.manage().window().maximize();
 
 		// Navigate to the website.
-		log.info("navigating to '" + baseUrl + "':");
+		log.info("navigating to '{}':", baseUrl);
 		driver.get(baseUrl);
 	}
-	
+
+	void getRidOfCookieGarbage() throws Exception {
+		WebDriver frameDriver = null;
+	  outer:
+		for (int n = 0; n < 10; n++) {
+			Thread.sleep(1000);
+
+			// the login-panel is an iframe - so we first need to find the correct one,
+			// i.e. the one whose name starts with "piano-id-":
+			//finding all the web elements using iframe tag
+			List<WebElement> iframeElements = driver.findElements(By.tagName("iframe"));
+			log.debug("Total number of iframes found: {}", iframeElements.size());
+
+			for (int i = 0; i < iframeElements.size(); i++) {
+				WebElement iframe = iframeElements.get(i);
+				String name = iframe.getDomAttribute("title");
+				log.debug("Frame-name: '" + name + "'");
+				if (name != null && name.equals("Cookie- und Datenverarbeitung")) {
+					log.info("iframe for cookie garbage found: '{}': {}", name, iframe);
+					frameDriver = driver.switchTo().frame(iframe);
+					log.info("switched to frame {}: '{}'", i, name);
+					break outer;
+				}
+			}
+		}
+		if (frameDriver != null) {
+			WebElement ablehnenButton = waitForAppearance("sp_choice_type_13", 5);
+			if (ablehnenButton != null) {
+				log.info("Clicking '{}'", ablehnenButton.getText());
+				ablehnenButton.click();
+				Thread.sleep(3000);
+			}
+			driver.switchTo().defaultContent();
+		} else {
+			log.info("No cookie and trackers nuissance detected.");
+		}
+	}
+
 	List<IssueDescriptor> loadListOfLastIssues() throws Exception {
 		// Ensure that the user has reached https://www.heise.de/select/ct/archiv:
 		final WebElement textOnHomePage = driver.findElement(By.xpath("//h1[contains(text(),\"Artikel-Archiv " + magazine.labelFragment + "\")]"));
@@ -104,12 +141,14 @@ public class Download_Heise
 			throw new Exception("The user hasn't arrived at Artikel-Archiv " + magazine.labelFragment + ".");
 		}
 
+
+
 		final WebElement anmeldenButton = driver.findElement(By.xpath("//span[contains(.,'Anmelden')]"));
 		log.debug("loginButton=" + anmeldenButton);
 		if (anmeldenButton.isDisplayed()) { // we are not logged-in, yet.
 			log.info("\"Anmelden\" is displayed - logging in:");
 			anmeldenButton.click();
-			// filling out the login form:			
+			// filling out the login form:
 			final WebElement loginUser = waitForAppearance(By.id("login-user"), 3); // give the site a few seconds to display the login-form...
 			final WebElement loginPassword = driver.findElement(By.id("login-password"));
 			final WebElement loginSubmit = driver.findElement(By.name("rm_login"));
@@ -118,21 +157,21 @@ public class Download_Heise
 			log.trace("entering password: '{}'", pwd);
 			loginPassword .sendKeys(pwd);
 			log.info("clicking '{}':", loginSubmit.getText());
-			loginSubmit.click();	
+			loginSubmit.click();
 			log.info("we should be logged-in now...");
 		} else {
-			log.info("'Anmelden' is NOT displayed - assuming that we already logged in.");			
+			log.info("'Anmelden' is NOT displayed - assuming that we already logged in.");
 		}
 
-		final WebElement archiveHeader = waitForAppearance("archive__header");		
+		final WebElement archiveHeader = waitForAppearance("archive__header");
 		final List<WebElement> issueButtons = driver.findElements(RelativeLocator.with(By.className("archive__year__link")).below(archiveHeader));
-		
+
 		final List<IssueDescriptor> issueDescriptors = issueButtons.stream()
 			.filter((issueButton) -> !issueButton.getText().isEmpty())
 			.map((issueButton) -> createIssue(issueButton))
 			.filter((issue) -> issue != null)
 			.collect(Collectors.toList());
-		
+
 		issueDescriptors.sort(new Comparator<IssueDescriptor>() // we need to sort for year and issue nr.:
 		{
 			@Override
@@ -152,7 +191,7 @@ public class Download_Heise
 
 	private IssueDescriptor createIssue(final WebElement issue) {
 		final String buttonLabel = issue.getText();
-		
+
 		final Matcher matcher = buttonLabelPattern.matcher(buttonLabel);
 		if (!matcher.find()) {
 			log.error("'{}' did not match pattern '{}' -> unable to extract year and issue-nr from name: ignored - please download manually", buttonLabel, buttonLabelPattern);
@@ -160,10 +199,10 @@ public class Download_Heise
 		}
 		String issueNr = matcher.group(3);
 		if (issueNr == null) {
-			issueNr = matcher.group(4).trim(); 
+			issueNr = matcher.group(4).trim();
 		}
 		final String jahrgang = matcher.group(5);
-		
+
 		log.debug("'{}' -> '{}' / '{}'", buttonLabel, jahrgang, issueNr);
 
 		return new IssueDescriptor(issue, jahrgang, issueNr);
@@ -227,7 +266,7 @@ public class Download_Heise
 		log.info("downloading '{}':", issue);
 		log.info("Clicking '{}'", issue.button.getText());
 		issue.button.click();
-		
+
 		log.info("waiting for the download link to appear:");
 		final WebElement downloadlink = waitForAppearance("issue-download-link", 65);
 
@@ -249,11 +288,11 @@ public class Download_Heise
 			Thread.sleep(1000);
 		}
 		if (nrWaits > DownloadMaxWait) {
-			throw new Exception(String.format("Download  did not complete in '%d' seconds - aborted.", nrWaits));			
+			throw new Exception(String.format("Download  did not complete in '%d' seconds - aborted.", nrWaits));
 		} else {
-			log.info("found '{}':", downloadFile.getAbsolutePath());			
+			log.info("found '{}':", downloadFile.getAbsolutePath());
 		}
-	
+
 		if (downloadFile.exists() && downloadFile.canRead()) {
 			if (targetPath == null || targetPath.equals(downloadPath)) {
 				log.debug("Downloaded file is already in target folder.");
@@ -263,16 +302,16 @@ public class Download_Heise
 				if (targetFile.exists()) {
 					log.info("deleting prior existing file '{}':", targetFile);
 					if (targetFile.delete()) {
-						log.info("prior existing file deleted.:", targetFile);					
+						log.info("prior existing file deleted.:", targetFile);
 					} else {
-						log.warn("unabled to delete prior existing file '{}' - the following move will likely fail:", targetFile);										
+						log.warn("unabled to delete prior existing file '{}' - the following move will likely fail:", targetFile);
 					}
 				}
 				log.info("moving the downloaded file '{}' to the target destination '{}':", downloadFile, targetFile);
 				if (downloadFile.renameTo(targetFile)) {
 					log.info("done.");
 				} else {
-					log.error("Failed to move the downloaded file '{}' to the target destination '{}' - file remains in download folder", downloadFile, targetFile);														
+					log.error("Failed to move the downloaded file '{}' to the target destination '{}' - file remains in download folder", downloadFile, targetFile);
 				}
 			}
 		} else {
@@ -288,16 +327,16 @@ public class Download_Heise
 			driver = null;
 		}
 	}
-	
+
 	WebElement waitForAppearance(final String className) throws Exception {
 		return waitForAppearance(className, AppearanceDefaultWait);
 	}
 	WebElement waitForAppearance(final String className, final int waitMaxSeconds) throws Exception {
 		return waitForAppearance(By.className(className), waitMaxSeconds);
 	}
-	
+
 	WebElement waitForAppearance(final By by, final int waitMaxSeconds) throws Exception {
-		log.info("waiting for appearance of element '{}'", by);	
+		log.info("waiting for appearance of element '{}'", by);
 		List<WebElement> elems = null;
 		WebElement expectedElem = null;
 		int nrAttempts = 0;
@@ -310,7 +349,7 @@ public class Download_Heise
 				log.info("no element '" + by + "' found within " + waitMaxSeconds + " seconds");
 				return null;
 			}
-			log.info("waiting ({})...", nrAttempts);			
+			log.info("waiting ({})...", nrAttempts);
 			Thread.sleep(1000);
 		} while (true);
 		return expectedElem;
@@ -327,10 +366,10 @@ public class Download_Heise
 				this.downloadPath = opt.getValue().replace('/', File.separatorChar);
 				if (this.downloadPath.endsWith("\"")) { // for some odd reason the trailing quote from the cmd-file makes in into the argument ||-(
 					this.downloadPath = this.downloadPath.substring(0, this.downloadPath.length()-1);
-				}				
+				}
 				break;
 			case 't':
-				this.targetPath = opt.getValue().replace('/', File.separatorChar); 
+				this.targetPath = opt.getValue().replace('/', File.separatorChar);
 				if (this.targetPath.endsWith("\"")) { // for some odd reason the trailing quote from the cmd-file makes in into the argument ||-(
 					this.targetPath = this.targetPath.substring(0, this.targetPath.length()-1);
 				}
@@ -344,7 +383,7 @@ public class Download_Heise
 			default:
 				log.error("Unexpected option: '{}' - ignored.");
 				usage(options, -4);
-			}	
+			}
 		}
 		if (this.usr == null || this.pwd == null || line.getArgList().size() > 0) {
 			usage(options, -5);
@@ -355,9 +394,11 @@ public class Download_Heise
 		// automatically generate the help statement
 		final HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp(100, "java -jar <jar.file> { <options> }.\n\n", "options are:", options, "");
-		if (exitCode != 0) System.exit(exitCode);
+		if (exitCode != 0) {
+			System.exit(exitCode);
+		}
 	}
-	
+
 	private static Options createOptions() {
 		final Options options = new Options();
 		options.addOption(new Option("m", "magazine", true, "magazine name [optional - default: '" + Magazine.ct + "']"));
@@ -366,7 +407,7 @@ public class Download_Heise
 		options.addOption(new Option("d", "download-folder", true, "download-folder [optional - default: '" + DefaultDownloadPath + "']"));
 		options.addOption(new Option("t", "target-folder", true, "target-folder [optional - default: same as download-folder]"));
 		return options;
-	}	
+	}
 
 	public static void main(final String[] arguments) {
 		Options options = null;
@@ -387,12 +428,13 @@ public class Download_Heise
 			System.err.println("Illegal or malformed option(s): " + exp.getMessage());
 			usage(options, -2);
 		}
-		
+
 		try {
 			final Download_Heise downloader = new Download_Heise();
 			downloader.processCommandLine(line, options);
 			downloader.init();
 			downloader.setUpBrowser();
+			downloader.getRidOfCookieGarbage();
 			final List<IssueDescriptor> issueDescriptors = downloader.loadListOfLastIssues();
 			downloader.loadMissingIssues(issueDescriptors);
 			downloader.closeBrowser();
