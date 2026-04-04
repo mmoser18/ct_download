@@ -2,7 +2,7 @@
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
     <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/ct_download/src/main/java/mmo/utils/ct_download/Download_CT.java"/>
+        <listEntry value="/heise_download/src/main/java/mmo/utils/heise_download/Download_Heise.java"/>
     </listAttribute>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="1"/>
@@ -12,9 +12,9 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="mmo.utils.ct_download.Download_CT"/>
-    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="ct_download"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-u &quot;michael.moser@alumni.ethz.ch&quot; -p &quot;8mY-G!hU&quot; -t &quot;C:\Users\mmo\Sync\Things to read\Heise Magazine\c't\%1$s&quot;"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ct_download"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="mmo.utils.heise_download.Download_Heise"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="heise_download"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-m make -u &quot;michael.moser@alumni.ethz.ch&quot; -p &quot;8mY-G!hU&quot; -t &quot;Y:\Things to read\Heise Magazine\Make\%2$s&quot;"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="heise_download"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
 </launchConfiguration>

@@ -56,7 +56,7 @@ public class Download_Heise
 	                                                  + File.separator + "Downloads";
 
 	// populated via processCommandLine():
-	private Magazine magazine;
+	private Magazine magazine = Magazine.ct;
 	private String downloadPath = DefaultDownloadPath;
 	private String targetPath;
 	private String usr;
@@ -248,7 +248,7 @@ public class Download_Heise
 
 	/** replace in template:
 	 * %1: magazin-name prefix
-	 * %2:  with jahrgang
+	 * %2: with jahrgang
 	 * %3: last two digits of jahrgang
 	 * %4: issue-nr.
 	 * @param template
@@ -401,11 +401,11 @@ public class Download_Heise
 
 	private static Options createOptions() {
 		final Options options = new Options();
-		options.addOption(new Option("m", "magazine", true, "magazine name [optional - default: '" + Magazine.ct + "']"));
-		options.addOption(new Option("u", "username", true, "user-id for login to Heise Media [required]"));
-		options.addOption(new Option("p", "password", true, "password for login to Heise Media [required]"));
-		options.addOption(new Option("d", "download-folder", true, "download-folder [optional - default: '" + DefaultDownloadPath + "']"));
-		options.addOption(new Option("t", "target-folder", true, "target-folder [optional - default: same as download-folder]"));
+		options.addRequiredOption("u", "username", true, "user-id for login to Heise Media [required]");
+		options.addRequiredOption("p", "password", true, "password for login to Heise Media [required]");
+		options.addOption("m", "magazine", true, "magazine name [optional - default: '" + Magazine.ct + "']");
+		options.addOption("d", "download-folder", true, "download-folder [optional - default: '" + DefaultDownloadPath + "']");
+		options.addOption("t", "target-folder", true, "target-folder [optional - default: same as download-folder]");
 		return options;
 	}
 

@@ -9,29 +9,38 @@ package mmo.utils.heise_download;
 
 import org.testng.annotations.*;
 
-import mmo.utils.heise_download.Download_Heise;
 
-
-public class Download_Heise_Test 
+public class Download_Heise_Test
 {
 	@BeforeMethod
 	public void setUpBrowser() {
-		// ...
-	}
-
-	@Test
-	public void loadLastCT() {
-		// you can enter your actual credentials here for testing. The defaults just 
-		// cause the browser to open but will not allow to do any actual download 
-		Download_Heise.main(new String[] {"-m", "ct", 
-		                                  "-u", "yourUserIdHere", 
-		                                  "-p", "yourPwdHere",
-		                                  "-t", "C:\\temp\\" 
-		                                 });
+		// done in called code ...
 	}
 
 	@AfterMethod
 	public void closeBrowser() {
-		// ...
+		// done in called code already...
+	}
+
+	@Test
+	public void loadLastCT() {
+		// you can enter your actual credentials here for testing. The defaults just
+		// cause the browser to open but will not allow to do any actual download
+		Download_Heise.main(new String[] {"-m", "ct",
+		                                  "-u", "yourUserIdHere",
+		                                  "-p", "yourPwdHere",
+		                                  "-t", "C:\\temp\\"
+		                                 });
+	}
+
+	@Test
+	public void loadLastMake() {
+		// you can enter your actual credentials here for testing. The defaults just
+		// cause the browser to open but will not allow to do any actual download
+		Download_Heise.main(new String[] {"-m", "make",
+		                                  "-u", "yourUserIdHere",
+		                                  "-p", "yourPwdHere",
+		                                  "-t", "C:\\temp\\"
+		                                 });
 	}
 }
