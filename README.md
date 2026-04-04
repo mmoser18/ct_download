@@ -1,13 +1,13 @@
-# c't Downloader
-This is a utility to regularly download all issues of the [c't magazine](https://www.heise.de/ct) in PDF format.
+# Heise Downloader
+This is a utility to regularly download issues of the [c't magazine](https://www.heise.de/ct) or [Make magazine](https://www.heise.de/make) both from Publisher ["Heise"]([Make magazine](https://www.heise.de) in PDF format.
 
 It uses [Selenium](https://www.selenium.dev/) to start a Chrome-Browser instance, navigates to 
 [https://www.heise.de/select/ct/archiv](https://www.heise.de/select/ct/archiv) and then selects 
 all issues shown, verifies that each is already present in the target folder and - if missing - downloads it.
 
-Thus, running this more frequent than the four issues listed of that page are dropping off to the right (i.e. at least every 8 weeks) this will make sure that you have all issues of c't downloaded to your destination folder in PDF format for your reading pleasure.
+Thus, running this more frequent than the four issues listed of that page are dropping off to the right (i.e. at least every 8 weeks) this will make sure that you have all issues of c't or Make downloaded to your destination folder in PDF format for your reading pleasure.
 
-Copyright © 2024-2025 by Michael Moser / 17732576+mmoser18@users.noreply.github.com
+Copyright © 2024-2026 by Michael Moser / 17732576+mmoser18@users.noreply.github.com
 
 ## Setup:
 The basic command-line is 
@@ -17,7 +17,8 @@ See the `downloadCT.cmd`-file for an example how to run this via a Windows comma
 (Note: you will have to enter your user-id and password into that file to get going...).
 
 ```
-usage: Download_CT
+usage: Download_Heise
+ -m,--magazine <arg>          magazine ("c't" or "Make") to download optional - default: "c't"] 
  -u,--username <arg>          user-id for login to Heise Media [required]
  -p,--password <arg>          password for login to Heise Media [required]
  -d,--download-folder <arg>   download-folder  [optional - default: %HOME%\downloads-folder will be used]
