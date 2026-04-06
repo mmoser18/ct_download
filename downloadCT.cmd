@@ -7,7 +7,9 @@ set prj=%HOME%\Documents\eclipse\workspace\heise_download
 rem target folder:
 set tgt=%prj%\target
 rem program executable location:
-set jar=%tgt%\heise_download-2.2.0.jar
+rem set jar=%tgt%\heise_download-2.2.0.jar - trying to find the correct jar automatically:
+for /f "tokens=*" %%i in ('dir /b "%tgt%\heise_download-*.jar"') do set jar=%%i
+echo executing: %jar%
 
 rem copy over the log-config:
 copy "%prj%\src\main\resources\*.xml" "%tgt%"
