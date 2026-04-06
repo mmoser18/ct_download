@@ -16,7 +16,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j.version>2.0.17</slf4j.version>
 		<selenium.version>4.41.0</selenium.version>
-		<commons-cli.version>1.6.0</commons-cli.version>
+		<commons-cli.version>1.11.0</commons-cli.version>
 	</properties>
 
 	<dependencyManagement>
@@ -26,6 +26,12 @@
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>
 				<version>1.18.44</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.21.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -38,7 +44,7 @@
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
@@ -76,8 +82,17 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>7.9.0</version>
+			<version>7.12.0</version>
 			<scope>test</scope>
+		</dependency>
+		
+		<!-- Plugin for library version checks and updates
+		     Source: https://mvnrepository.com/artifact/org.codehaus.mojo/versions-maven-plugin 
+		-->
+		<dependency>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>versions-maven-plugin</artifactId>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
@@ -100,6 +115,41 @@
 							</path>
 						</annotationProcessorPaths>
 						<!-- -->
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>versions-maven-plugin</artifactId>
+					<version>2.21.0</version>
+					<configuration>
+						<processDependencyManagement>false</processDependencyManagement>
+						<processPluginDependenciesInPluginManagement>false</processPluginDependenciesInPluginManagement>
+						<!-- Ignore unstable versions globally: -->
+						<ignoredVersions>
+							<ignoredVersion>.*-M.*</ignoredVersion>
+							<ignoredVersion>.*-alpha.*</ignoredVersion>
+							<ignoredVersion>.*-Alpha.*</ignoredVersion>
+							<ignoredVersion>.*-beta.*</ignoredVersion>
+							<ignoredVersion>.*-Beta.*</ignoredVersion>
+							<ignoredVersion>.*-b\d*</ignoredVersion> <!---b06 -->
+							<ignoredVersion>.*-rc.*</ignoredVersion>
+							<ignoredVersion>.*-RC.*</ignoredVersion>
+							<ignoredVersion>.*\.Dev.*</ignoredVersion>
+							<ignoredVersion>.*-SNAPSHOT</ignoredVersion>
+						</ignoredVersions>
+						<!-- Example: Exclude specific project dependencies ->
+						<dependencyExcludes>
+							<dependencyExclude>org.slf4j:slf4j-simple</dependencyExclude>
+							<dependencyExclude>dom4j:dom4j</dependencyExclude>
+						</dependencyExcludes>
+						<!- -->
+						<!-- Example: Exclude plugin transitive dependencies ->
+						<pluginDependencyExcludes>
+							<pluginDependencyExclude>
+								org.codehaus.plexus:plexus-utils</pluginDependencyExclude>
+						</pluginDependencyExcludes>
+						<!- -->
 					</configuration>
 				</plugin>
 			</plugins>
@@ -170,6 +220,11 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
 			</plugin>
 		</plugins>	
 	</build>
