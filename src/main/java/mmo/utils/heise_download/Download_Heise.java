@@ -1,5 +1,5 @@
 /**
- * Copyright © 2024-2025 by Michael Moser
+ * Copyright © 2024-2026 by Michael Moser
  * Released under GPL V3 or later
  *
  * @author mmo / Michael Moser / 17732576+mmoser18@users.noreply.github.com
@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,19 +21,27 @@ import java.util.stream.Collectors;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.help.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.locators.RelativeLocator;
 
 @Slf4j
 @ToString
 public class Download_Heise
 {
+	private final static int DownloadMaxWait = 200; // [seconds] max. completion wait time before a download is considered failed
+	private final static int AppearanceDefaultWait = 10; // [seconds]
+	private final static String DefaultDownloadPath = (System.getProperty("os.name").startsWith("Windows")
+	                                                  ? System.getProperty("user.home", "U:") // assuming "U:" points to user's home directory
+	                                                  : "~") // for *ix and Mac
+	                                                  + File.separator + "Downloads";
+
 	enum Magazine {
 		ct   ("ct",   "c't",  "ct"),
 		make ("make", "Make", "ch"); // re. "ch": oddly, the Make-download-files are named "ch.year.issue"
@@ -48,19 +57,16 @@ public class Download_Heise
 		}
 	}
 
-	private final static int DownloadMaxWait = 200; // [seconds] max. completion wait time before a download is considered failed
-	private final static int AppearanceDefaultWait = 10; // [seconds]
-	private final static String DefaultDownloadPath = (System.getProperty("os.name").startsWith("Windows")
-	                                                  ? System.getProperty("user.home", "U:") // assuming "U:" points to user's home directory
-	                                                  : "~") // for *ix and Mac
-	                                                  + File.separator + "Downloads";
+	private final static String TempDirName = "Heise";
+	private final static String DownloadDirPath = DefaultDownloadPath + File.separator + TempDirName;
 
 	// populated via processCommandLine():
-	private Magazine magazine = Magazine.ct;
-	private String downloadPath = DefaultDownloadPath;
-	private String targetPath;
 	private String usr;
 	private String pwd;
+	private Magazine magazine = Magazine.ct;
+	private String downloadPath = DownloadDirPath;
+	private String targetPath;
+	private boolean debug;
 
 	// populated via init():
 	private String baseUrl;
@@ -68,7 +74,9 @@ public class Download_Heise
 	private Pattern buttonLabelPattern;
 	private String issueFileName;
 
+	// populated via setupBrowser():
 	private WebDriver driver;
+
 
 	protected void init() {
 		this.baseUrl = String.format("https://www.heise.de/select/%s/archiv", magazine.urlFragment);
@@ -84,10 +92,36 @@ public class Download_Heise
 		super.finalize();
 	}
 
-	void setUpBrowser() {
+	void setUpBrowser() throws Exception {
 		log.info("setUpBrowser.");
-		// Initialize ChromeDriver.
-		driver = new ChromeDriver();
+
+		// prepare download location:
+		final File file = new File(DownloadDirPath);
+		if (!file.exists()) {
+			if (!file.mkdirs()) {
+				throw new Exception("Not able to create temp. download directory '" + DownloadDirPath + "'");
+			}
+		}
+		if (!file.isDirectory() || !file.canRead()) {
+			throw new Exception("Temp. download directory '" + DownloadDirPath + "' is not a directory or not readable.");
+		}
+		if (!debug) {
+			file.deleteOnExit();
+		}
+
+		// Initialize ChromeDriver:
+		ChromeOptions chromeOptions = new ChromeOptions();
+		// found this "https://medium.com/@akshayshinde7289/how-to-download-pdf-file-in-chrome-using-selenium-6a717ced483b"
+		// to disable the built-in PDF previewer:
+		HashMap<String, Object> chromeOptionsMap = new HashMap<String, Object>();
+		chromeOptionsMap.put("download.default_directory", DownloadDirPath);
+		chromeOptionsMap.put("plugins.plugins_disabled", new String[] { "Chrome PDF Viewer" });
+		chromeOptionsMap.put("plugins.always_open_pdf_externally", true);
+		chromeOptions.setExperimentalOption("prefs", chromeOptionsMap);
+		// chromeOptions.addArguments("--remote-allow-origins=*");
+
+		// Create ChromeDriver.
+		driver = new ChromeDriver(chromeOptions);
 
 		// Maximize the browser window size.
 		// driver.manage().window().maximize();
@@ -134,14 +168,12 @@ public class Download_Heise
 		}
 	}
 
-	List<IssueDescriptor> loadListOfLastIssues() throws Exception {
+	void login() throws Exception {
 		// Ensure that the user has reached https://www.heise.de/select/ct/archiv:
 		final WebElement textOnHomePage = driver.findElement(By.xpath("//h1[contains(text(),\"Artikel-Archiv " + magazine.labelFragment + "\")]"));
 		if (!textOnHomePage.isDisplayed()) {
 			throw new Exception("The user hasn't arrived at Artikel-Archiv " + magazine.labelFragment + ".");
 		}
-
-
 
 		final WebElement anmeldenButton = driver.findElement(By.xpath("//span[contains(.,'Anmelden')]"));
 		log.debug("loginButton=" + anmeldenButton);
@@ -162,7 +194,8 @@ public class Download_Heise
 		} else {
 			log.info("'Anmelden' is NOT displayed - assuming that we already logged in.");
 		}
-
+	}
+	List<IssueDescriptor> loadListOfLastIssues() throws Exception {
 		final WebElement archiveHeader = waitForAppearance("archive__header");
 		final List<WebElement> issueButtons = driver.findElements(RelativeLocator.with(By.className("archive__year__link")).below(archiveHeader));
 
@@ -232,7 +265,7 @@ public class Download_Heise
 			final String fullpath = path + (path.endsWith(File.separator) ? "" : File.separatorChar) + filename;
 			issue.setFilename(filename);
 			issue.setTargetFullPath(fullpath);
-			log.info("checking whether file '{}' already exists:", fullpath);
+			log.info("checking for file '{}':", fullpath);
 			if (new File(fullpath).exists()) {
 				log.info("already exists.");
 				return true;
@@ -323,7 +356,14 @@ public class Download_Heise
 	void closeBrowser() {
 		log.info("closeBrowser.");
 		if (driver != null) { // terminate the browser.
-			driver.quit();
+			try {
+				if (!debug) {
+					driver.quit();
+				}
+			} catch (Exception ex) {
+				log.error("closing/quitting driver threw an exception: " + ex.getMessage());
+				// ignore - we were only trying to gracefully shut down anyway...
+			}
 			driver = null;
 		}
 	}
@@ -359,6 +399,12 @@ public class Download_Heise
 		for (Option opt: line.getOptions()) {
 			log.debug("option {}: '{}'", (char)opt.getId(), opt.getValue());
 			switch (opt.getId()) {
+			case 'u':
+				this.usr = opt.getValue();
+				break;
+			case 'p':
+				this.pwd = opt.getValue();
+				break;
 			case 'm':
 				magazine = Magazine.valueOf(opt.getValue().toLowerCase());
 				break;
@@ -374,12 +420,6 @@ public class Download_Heise
 					this.targetPath = this.targetPath.substring(0, this.targetPath.length()-1);
 				}
 				break;
-			case 'u':
-				this.usr = opt.getValue();
-				break;
-			case 'p':
-				this.pwd = opt.getValue();
-				break;
 			default:
 				log.error("Unexpected option: '{}' - ignored.");
 				usage(options, -4);
@@ -392,8 +432,12 @@ public class Download_Heise
 
 	private static void usage(final Options options, final int exitCode) {
 		// automatically generate the help statement
-		final HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(100, "java -jar <jar.file> { <options> }.\n\n", "options are:", options, "");
+		final HelpFormatter formatter = HelpFormatter.builder().get();
+		try {
+			formatter.printHelp( "java -jar <jar.file> { <options> }.\n\n", "download a magazine (\"c't\" or \"Make\") from heise publisher", options, null, true);
+		} catch (Exception ex) {
+			log.error("Error printing usage", ex);
+		}
 		if (exitCode != 0) {
 			System.exit(exitCode);
 		}
@@ -435,6 +479,7 @@ public class Download_Heise
 			downloader.init();
 			downloader.setUpBrowser();
 			downloader.getRidOfCookieGarbage();
+			downloader.login();
 			final List<IssueDescriptor> issueDescriptors = downloader.loadListOfLastIssues();
 			downloader.loadMissingIssues(issueDescriptors);
 			downloader.closeBrowser();
